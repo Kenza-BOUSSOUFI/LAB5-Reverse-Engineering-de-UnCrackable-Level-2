@@ -74,6 +74,13 @@ la bibliothèque libfoo.so
 
 Étape 7 — Importer libfoo.so dans Ghidra
 
+Lancement de Ghidra: 
+
+<img width="963" height="38" alt="image" src="https://github.com/user-attachments/assets/2633ecfe-95cc-44c3-bb10-6440c36beb28" />
+
+<img width="633" height="977" alt="image" src="https://github.com/user-attachments/assets/c79c09b8-a7b7-49e3-850a-74496b8e087d" />
+
+
 J'ai créé un nouveau projet Ghidra et importé le fichier lib/x86/libfoo.so. Ghidra a automatiquement détecté :
 
 Format : ELF (Executable and Linking Format)
