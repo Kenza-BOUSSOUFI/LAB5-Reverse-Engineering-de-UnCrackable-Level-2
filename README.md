@@ -1,5 +1,7 @@
 # LAB5-Reverse-Engineering-de-UnCrackable-Level-2
 
+Pour ce lab, l'analyse a été réalisée entièrement en analyse statique, sans émulateur.L'APK ne se lance pas sur l'émulateur.
+
 # Partie 2 — Trouver où commence la vérification
 
 Étape 3 — Décompiler l’APK avec JADX
@@ -97,7 +99,7 @@ L'inportation de la bibliothèque libfoo.so:
 
 <img width="612" height="312" alt="image" src="https://github.com/user-attachments/assets/43feca08-d3db-4e85-b3a0-d31007394c05" />
 
- double-clique sur libfoo.so
+ Un double-clique sur libfoo.so
 
 <img width="1006" height="1026" alt="image" src="https://github.com/user-attachments/assets/53e71a6f-b71f-4cb3-bc79-1c800479032d" />
 
@@ -129,6 +131,70 @@ Checkpoint ✅ : La fonction native de vérification est identifiée dans libfoo
 # Partie 6 — Comprendre la comparaison avec strncmp
 
 Étape 9 — Lire le pseudo-code de la fonction native
+
+Dans le décompilateur Ghidra, j'observe que la fonction copie une chaîne dans un buffer local puis la compare à l'entrée utilisateur via strncmp :
+
+<img width="695" height="278" alt="image" src="https://github.com/user-attachments/assets/79d5438f-d30c-4b4b-9a28-1ea4e8f3eff0" />
+
+La chaîne secrète est visible en clair directement dans le pseudo-code : **`Thanks for all the fish`**
+
+Checkpoint ✅ : La chaîne cachée utilisée comme secret est identifiée directement.
+
+Étape 10 — Retrouver la valeur comparée
+
+Dans ce cas, la chaîne est visible en clair dans le décompilateur Ghidra, ce qui rend l'étape 10 directement résolue.
+
+La valeur hexadécimale correspondante est :
+
+6873696620656874206c6c6120726f6620736b6e616854
+
+Ce qui correspond octet par octet à la chaîne ASCII "Thanks for all the fish"
+
+# Partie 7 — Décoder le secret
+
+Étape 11 — Convertir l’hexadécimal en ASCII
+
+1. Décodage hexadécimal de la chaine dans Python:
+
+<img width="917" height="182" alt="image" src="https://github.com/user-attachments/assets/5b0d61c5-2bfc-495f-b540-e212843ca830" />
+
+2. Résultat ASCII obtenu:
+
+<img width="513" height="52" alt="image" src="https://github.com/user-attachments/assets/009e9959-52a8-4145-96e4-f187f0a7f4ec" />
+
+Étape 12 — Inverser la chaîne pour obtenir la phrase finale
+
+1. Inversion de la chaîne dans Python:
+
+<img width="628" height="42" alt="image" src="https://github.com/user-attachments/assets/54fa6298-7743-40c7-b5cf-b942b00a4011" />
+
+2. Secret final obtenu:
+
+<img width="507" height="58" alt="image" src="https://github.com/user-attachments/assets/f497ba0f-6c01-4de0-ba86-04ce4c024e6b" />
+
+# Partie 8 — Valider la solution
+
+Étape 13 — Tester le secret dans l’application
+
+L'analyse statique complète a permis de retrouver le secret sans exécuter l'application :
+
+MainActivity transmet la saisie à CodeCheck.a()
+
+CodeCheck.a() appelle la méthode native bar() via JNI
+
+libfoo.so compare la saisie à la chaîne "Thanks for all the fish" via strncmp
+
+La chaîne était stockée en hexadécimal inversé dans la bibliothèque native
+
+Le secret final est : Thanks for all the fish
+
+La validation dans l'application n'a pas été effectuée (pas d'émulateur), mais l'analyse statique confirme sans ambiguïté que cette chaîne est la bonne réponse.
+
+Checkpoint final ✅ : Le challenge UnCrackable Level 2 est résolu par analyse statique.
+
+
+
+
 
 
 
