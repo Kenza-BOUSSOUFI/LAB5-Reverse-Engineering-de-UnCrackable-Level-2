@@ -119,6 +119,11 @@ En double-cliquant dessus, le décompilateur affiche le code suivant :
 Checkpoint ✅ : La fonction native de vérification est identifiée dans libfoo.so.
 
 
+# Partie 6 — Comprendre la comparaison avec strncmp
+
+Étape 9 — Lire le pseudo-code de la fonction native
+
+
 
 
 
